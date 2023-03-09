@@ -19,12 +19,11 @@ export async function getServerSideProps(context) {
   const db = client.db(process.env.MONGODB_DB);
 
   const todos = await db.collection('todos').find({ userEmail }).toArray();
-console.log(todos)
   
 client.close();
 
   const serializedTodos = JSON.parse(JSON.stringify(todos));
-
+console.log(serializedTodos)
   return {
     props: {
       session,
@@ -50,8 +49,9 @@ export default function Home({ session, todos }) {
           <h3>All Todos</h3>
           {todos.map(todo => (
         <div key={todo._id}>
-          <p>{todo.title}</p>
-          <p>{todo.description}</p>
+          <h4>{todo.todo}</h4>
+          <p>{todo.details}</p>
+          <p>{todo.userEmail}</p>
         </div>
       ))}
       <form action="/api/submit-form" method="POST">
