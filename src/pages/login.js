@@ -10,8 +10,8 @@ export default function login (){
             <>
             <h2>Welcome, {session.user.name}</h2>
             <img src={session.user.image} alt="" /> <br/>
+            <Link href="/todos">View Todos</Link> <br/>
             <button onClick={() => signOut()}>Sign Out</button>
-            <Link href="/todos">View Todos</Link>
             </>
         )
     } else {

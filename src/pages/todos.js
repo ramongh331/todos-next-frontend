@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { signOut, signIn, getSession } from "next-auth/react";
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -8,7 +8,7 @@ export async function getServerSideProps(context) {
   if (!session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: "/login",
         permanent: false,
       },
     };
@@ -18,12 +18,12 @@ export async function getServerSideProps(context) {
   const client = await MongoClient.connect(process.env.MONGODB_URI);
   const db = client.db(process.env.MONGODB_DB);
 
-  const todos = await db.collection('todos').find({ userEmail }).toArray();
-  
-client.close();
+  const todos = await db.collection("todos").find({ userEmail }).toArray();
+
+  client.close();
 
   const serializedTodos = JSON.parse(JSON.stringify(todos));
-console.log(serializedTodos)
+
   return {
     props: {
       session,
@@ -33,7 +33,6 @@ console.log(serializedTodos)
 }
 
 export default function Home({ session, todos }) {
-
   if (session) {
     return (
       <>
@@ -44,22 +43,21 @@ export default function Home({ session, todos }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main>
-        <button onClick={() => signOut()}>Sign Out</button>
+          <button onClick={() => signOut()}>Sign Out</button>
           <h2>Hi, {session.user.name}</h2>
           <h3>All Todos</h3>
-          {todos.map(todo => (
-        <div key={todo._id}>
-          <h4>{todo.todo}</h4>
-          <p>{todo.details}</p>
-          <p>{todo.userEmail}</p>
-        </div>
-      ))}
-      <form action="/api/submit-form" method="POST">
-        <input type="text" name="todo" placeholder="Todo Title"/>
-        <input type="text" name="details" placeholder="Todo Details"/>
-        <button type="submit">Add Todo</button>
-      </form>
-
+          {todos.map((todo) => (
+            <div key={todo._id}>
+              <h4>{todo.todo}</h4>
+              <p>{todo.details}</p>
+              <p>{todo.userEmail}</p>
+            </div>
+          ))}
+          <form action="/api/submit-form" method="POST">
+            <input type="text" name="todo" placeholder="Todo Title" />
+            <input type="text" name="details" placeholder="Todo Details" />
+            <button type="submit">Add Todo</button>
+          </form>
         </main>
       </>
     );
@@ -72,4 +70,3 @@ export default function Home({ session, todos }) {
     );
   }
 }
-
