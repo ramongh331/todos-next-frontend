@@ -1,16 +1,9 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-// import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
 
 
+export default function Home() {
 
-const inter = Inter({ subsets: ['latin'] })
-
-
-
-export default function Home({todos}) {
   return (
     <>
       <Head>
@@ -21,7 +14,7 @@ export default function Home({todos}) {
       </Head>
       <main>
         <h1>Home</h1>
-        <Link href="/todos">Todos List</Link>
+        <Link href="/todos">Todos List</Link> <br/>
       </main>
     </>
   )

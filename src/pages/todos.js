@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { signOut, signIn, getSession } from "next-auth/react";
 import { MongoClient } from "mongodb";
 
@@ -45,6 +46,7 @@ export default function Home({ session, todos }) {
         <main>
           <button onClick={() => signOut()}>Sign Out</button>
           <h2>Hi, {session.user.name}</h2>
+          <Link href="/profile/6409312bc8948694ec96387f">Ramon's Profile</Link>
           <h3>All Todos</h3>
           {todos.map((todo) => (
             <div key={todo._id}>
