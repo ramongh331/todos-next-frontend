@@ -19,21 +19,27 @@ export async function getServerSideProps(context) {
   const client = await MongoClient.connect(process.env.MONGODB_URI);
   const db = client.db(process.env.MONGODB_DB);
 
+  const userId = await db.collection("users").findOne({email: userEmail})
   const todos = await db.collection("todos").find({ userEmail }).toArray();
 
   client.close();
 
+  const serializedUser = JSON.parse(JSON.stringify(userId));
   const serializedTodos = JSON.parse(JSON.stringify(todos));
 
   return {
     props: {
       session,
       todos: serializedTodos,
+      user: serializedUser,
     },
   };
 }
 
-export default function Home({ session, todos }) {
+export default function Home({ session, todos, user }) {
+  
+  console.log("User_id: " + user._id)
+  
   if (session) {
     return (
       <>
@@ -46,7 +52,7 @@ export default function Home({ session, todos }) {
         <main>
           <button onClick={() => signOut()}>Sign Out</button>
           <h2>Hi, {session.user.name}</h2>
-          <Link href="/profile/6409312bc8948694ec96387f">Ramon's Profile</Link>
+          <Link href={`/profile/${user._id}`}>{user.name}'s Profile</Link>
           <h3>All Todos</h3>
           {todos.map((todo) => (
             <div key={todo._id}>
